@@ -1,0 +1,49 @@
+services:
+  server:
+    container_name: stock-pi-server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - FINNHUB_API_KEY=${FINNHUB_API_KEY}
+    restart: unless-stopped
+    networks:
+      - stock-pi-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+
+  client:
+    container_name: stock-pi-client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "4173:4173"
+    environment:
+      - NODE_ENV=production
+      - PORT=4173
+      - VITE_API_URL=http://stock-pi-server:3000/api
+    depends_on:
+      server:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - stock-pi-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4173"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+
+networks:
+  stock-pi-network:
+    driver: bridge 

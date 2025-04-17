@@ -1,9 +1,11 @@
 import { defineConfig } from 'vite'
 import preact from '@preact/preset-vite'
+import { resolve } from 'path'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [preact()],
+  envDir: resolve(__dirname, '../'),
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
@@ -21,7 +23,14 @@ export default defineConfig({
     }
   },
   server: {
-    host: '0.0.0.0',
-    port: 5173
-  }
+    port: 4173,
+    strictPort: true,
+    host: true,
+    origin: "http://0.0.0.0:4173",
+  },
+  preview: {
+    port: 4173,
+    strictPort: true,
+    host: true,
+  },
 })

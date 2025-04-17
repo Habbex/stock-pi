@@ -23,13 +23,16 @@ body {
 }
 
 .container {
+  width: 100vw;
+  height: 100vh;
   max-width: 480px;
+  max-height: 320px;
   margin: 0 auto;
-  padding: 8px;
-  min-height: 100vh;
+  padding: 5px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
+  overflow: hidden;
 }
 
 header {
@@ -363,4 +366,10 @@ select:focus {
   .details {
     gap: 10px;
   }
-} 
+}
+
+@media (max-height: 320px) {
+  h1 { font-size: 1rem; }
+  .current-price { font-size: 1.5rem; }
+  .detail-row { padding: 4px 8px; font-size: 12px; }
+}

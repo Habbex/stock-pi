@@ -1,8 +1,7 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import dotenv from 'dotenv';
-
-dotenv.config();
+dotenv.config({ path: '../.env' });
 
 const fastify = Fastify({
   logger: {
@@ -206,11 +205,13 @@ fastify.get('/api/stock/:symbol', async (request, reply) => {
   reply.code(404).send({ error: 'Stock data not available' });
 });
 
+// Add health check endpoint
+fastify.get('/health', async (request, reply) => {
+  return { status: 'ok' };
+});
+
 // Start server
-try {
-  await fastify.listen({ port: 3000, host: '0.0.0.0' });
-  fastify.log.info('Server started successfully');
-} catch (err) {
-  fastify.log.error(err);
-  process.exit(1);
-} 
+const port = process.env.PORT || 3000;
+await fastify.listen({ port, host: '0.0.0.0' });
+fastify.log.info(`Server listening at http://0.0.0.0:${port}`);
+fastify.log.info('Server started successfully'); 

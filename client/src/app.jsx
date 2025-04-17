@@ -1,19 +1,16 @@
-import { h } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
 import axios from 'axios';
 
 // Update API URL to match your backend
-const API_URL = 'http://localhost:3000/api'; // Changed back to port 3000 to match the running server
-const ROTATION_INTERVAL = 120000; // 2 minutes in milliseconds
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+console.log('API_URL:', API_URL);
+const ROTATION_INTERVAL = 60000; // 1 minute in milliseconds
 const FULL_LIST_UPDATE_INTERVAL = 300000; // 5 minutes
 const MAJORITY_THRESHOLD = 0.6; // 60% of stocks need to be down to trigger warning
 
-// Top cryptocurrencies to display
-const CRYPTO_SYMBOLS = ['BTC', 'ETH', 'USDT', 'BNB', 'XRP', 'ADA', 'DOGE', 'SOL'];
 
 export function App() {
   const [stocks, setStocks] = useState({});
-  const [cryptos, setCryptos] = useState({});
   const [currentSymbol, setCurrentSymbol] = useState('AAPL');
   const [error, setError] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
@@ -85,10 +82,6 @@ export function App() {
     fetchSelectedStock();
   }, [currentSymbol]);
 
-  // Temporarily disable crypto fetching until endpoints are ready
-  useEffect(() => {
-    setCryptos({}); // Empty object to show loading state
-  }, []);
 
   // Rotate through stocks
   useEffect(() => {

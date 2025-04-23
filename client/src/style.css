@@ -26,8 +26,6 @@ body, html {
 }
 
 .container {
-  width: 100vw;
-  height: 100vh;
   max-width: 480px;
   max-height: 320px;
   padding: 4px;
